@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>命式結果</title>
+</head>
+<body>
+    <h1>{{ name }} さんの命式</h1>
+    <p>生年月日：{{ birth_date }}　出生時間：{{ birth_time }}</p>
+
+    <h2>【四柱】</h2>
+    <ul>
+        <li>年柱：{{ meishiki['年柱'] }}</li>
+        <li>月柱：{{ meishiki['月柱'] }}</li>
+        <li>日柱：{{ meishiki['日柱'] }}</li>
+        <li>時柱：{{ meishiki['時柱'] }}</li>
+    </ul>
+
+    <h2>【通変星】</h2>
+    <ul>
+        {% for star in meishiki['通変星'] %}
+        <li>{{ star }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>【十二運】</h2>
+    <ul>
+        {% for un in meishiki['十二運'] %}
+        <li>{{ un }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>【空亡】</h2>
+    <p>{{ meishiki['空亡']|join(', ') }}</p>
+
+    <h2>【大運】</h2>
+    <ul>
+        {% for d in meishiki['大運'] %}
+        <li>{{ d['年齢'] }}：{{ d['干支'] }} {% if d['空亡'] %}（※空亡）{% endif %}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>【流年】</h2>
+    <ul>
+        {% for r in meishiki['流年'] %}
+        <li>{{ r['年'] }}：{{ r['干支'] }} {% if r['空亡'] %}（※空亡）{% endif %}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">← もどる</a>
+</body>
+</html>
