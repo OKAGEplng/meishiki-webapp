@@ -35,4 +35,4 @@ def result():
     return render_template('result.html', name=name, birth_date=birth_date, birth_time=birth_time, meishiki=meishiki)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=10000)
