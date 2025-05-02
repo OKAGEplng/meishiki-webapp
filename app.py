@@ -3,6 +3,17 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# 十干・十二支・六十干支
+jikkan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸']
+junishi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
+kan_shi = [j + s for i, j in enumerate(jikkan) for s in junishi[i % 6::2] * 5][:60]
+
+def calc_nisshi(birth_date):
+    base_date = datetime(1900, 1, 31)  # 干支起点日（甲子）
+    target = datetime.strptime(birth_date, "%Y-%m-%d")
+    delta_days = (target - base_date).days
+    return kan_shi[delta_days % 60]
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -13,23 +24,20 @@ def result():
     birth_date = request.form['birthdate']
     birth_time = request.form['birthtime']
 
-    # 仮の命式データ（ここに計算ロジックを後で入れる）
+    # 実際に日柱を算出
+    nisshi = calc_nisshi(birth_date)
+
+    # 仮データ（次に差し替え予定）
     meishiki = {
-        '年柱': '己亥',
-        '月柱': '庚戌',
-        '日柱': '壬寅',
-        '時柱': '甲子',
-        '通変星': ['偏官', '正財', '印綬', '食神'],
-        '十二運': ['墓', '冠帯', '建禄', '胎'],
-        '空亡': ['寅', '卯'],
-        '大運': [
-            {'年齢': '10〜19歳', '干支': '癸丑', '空亡': False},
-            {'年齢': '20〜29歳', '干支': '甲寅', '空亡': True},
-        ],
-        '流年': [
-            {'年': 2025, '干支': '乙巳', '空亡': False},
-            {'年': 2026, '干支': '丙午', '空亡': False},
-        ]
+        '年柱': '調整中',
+        '月柱': '調整中',
+        '日柱': nisshi,
+        '時柱': '調整中',
+        '通変星': ['（後ほど追加）'],
+        '十二運': ['（後ほど追加）'],
+        '空亡': ['（後ほど追加）'],
+        '大運': [],
+        '流年': []
     }
 
     return render_template('result.html', name=name, birth_date=birth_date, birth_time=birth_time, meishiki=meishiki)
